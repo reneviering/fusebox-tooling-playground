@@ -39,8 +39,17 @@ function bundleVendor({outFile}) {
 	return fuseBox.bundle(`${externalDependencies}`);
 }
 
-module.exports = ({isVendor=false}) => {
+function bundleDist({outFile}) {
+	const fuseBox = createFuseBoxInstance({outFile});
+	return fuseBox.bundle(`>index.js`);
+}
+
+module.exports = ({isVendor=false, isDist=false}) => {
 	return () => {
+		if (isDist) {
+				return bundleDist({outFile:'./dist/bundle.min.js'});
+		}
+
 		return isVendor
 			? bundleVendor({outFile: './server/vendor.js'})
 			: bundleClient({outFile: './server/client.js'});
