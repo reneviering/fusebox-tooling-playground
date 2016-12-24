@@ -38,7 +38,7 @@ gulp.task("build", () => {
 });
 
 
-gulp.task('init', () => {
+gulp.task('dev', () => {
 	return runSequence('clean', 'copy', 'build');
 });
 
@@ -59,7 +59,7 @@ gulp.task('reload', () => {
 	browserSync.reload();
 });
 
-gulp.task('default', ['init', 'browser-sync'], function() {
+gulp.task('default', ['dev', 'browser-sync'], function() {
 		gulp.watch('src/**/*.*', () => {
 			 runSequence('copy', 'build', 'reload');
 	 });
