@@ -4,8 +4,8 @@
   "description": "A skeleton for a SPA",
   "main": "index.js",
   "scripts": {
-    "bundle": "browserify src/index.js -t babelify --outfile bundle.js",
-    "start": "gulp start"
+    "start": "gulp",
+		"build": "gulp dist"
   },
   "author": "René Viering",
   "license": "MIT",
