@@ -47,11 +47,11 @@ function bundleDist({outFile}) {
 module.exports = ({isVendor=false, isDist=false}) => {
 	return () => {
 		if (isDist) {
-				return bundleDist({outFile:'./dist/bundle.min.js'});
+				return bundleDist({outFile:'./dist/app/bundle.min.js'});
 		}
 
 		return isVendor
-			? bundleVendor({outFile: './server/vendor.js'})
-			: bundleClient({outFile: './server/client.js'});
+			? bundleVendor({outFile: './server/app/vendor.js'})
+			: bundleClient({outFile: './server/app/client.js'});
 	}
 };

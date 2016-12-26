@@ -5,6 +5,10 @@ var browserSync = require('browser-sync').create();
 var clean = require('gulp-clean');
 var processhtml = require('gulp-processhtml');
 var uglifyJS = require('gulp-uglify');
+var less = require('gulp-less');
+var autoprefixer = require('gulp-autoprefixer');
+var uglifycss = require('gulp-uglifycss');
+var rename = require('gulp-rename');
 
 /* ###################
  * Clean Tasks
@@ -23,13 +27,15 @@ gulp.task('clean:dist', () => {
  * ###################*/
 gulp.task('copy', () => {
 	return gulp.src([
-		'./src/**/*.html'
+		'./src/**/*.html',
+		'./src/**/*.css'
 	])
 	.pipe(gulp.dest('./server'))
 });
 gulp.task('copy:dist', () => {
 	return gulp.src([
-		'./src/**/*.html'
+		'./src/**/*.html',
+		'./src/**/*.css'
 	])
 	.pipe(gulp.dest('./dist'))
 });
@@ -55,7 +61,26 @@ gulp.task("build", () => {
 
 
 gulp.task('dev', () => {
-	return runSequence('clean', 'copy', 'build');
+	return runSequence('clean', 'copy', 'build', 'css');
+});
+
+/* ###################
+ * CSS Task
+ * ###################*/
+ gulp.task('css', function () {
+	return gulp.src('./src/assets/less/index.less')
+		.pipe(less())
+		.pipe(autoprefixer({
+			browsers: [
+				'> 1%',
+				'last 3 version',
+				'ie 8',
+				'ie 9',
+				'Firefox ESR',
+				'Opera 12.1'
+			]
+		}))
+		.pipe(gulp.dest('./src/assets/css'));
 });
 
 /* ###################
@@ -67,7 +92,7 @@ gulp.task('process-html', () => {
    .pipe(gulp.dest('./dist'));
 });
 gulp.task('compress', () => {
-	return gulp.src('./dist/bundle.min.js')
+	return gulp.src('./dist/app/bundle.min.js')
 		.pipe(uglifyJS({
 			compress: {
 				drop_console: true
@@ -75,8 +100,21 @@ gulp.task('compress', () => {
 		}))
 		.pipe(gulp.dest('./dist'));
 });
+gulp.task('compress:css', () => {
+	return gulp.src('./dist/assets/css/index.css')
+		.pipe(uglifycss({
+      "maxLineLen": 80,
+      "uglyComments": true
+    }))
+		.pipe(rename('index.min.css'))
+		.pipe(gulp.dest('./dist/assets/css'));
+});
+gulp.task('cleanup:dist', () => {
+	return gulp.src('./dist/assets/css/index.css')
+				 .pipe(clean());
+});
 gulp.task('dist', () => {
-	return runSequence('clean:dist', 'copy:dist', 'build:dist', 'process-html', 'compress');
+	return runSequence('clean:dist', 'copy:dist', 'build:dist', 'process-html', 'compress', 'compress:css', 'cleanup:dist');
 });
 
 /* ###################
@@ -97,6 +135,6 @@ gulp.task('reload', () => {
 
 gulp.task('default', ['dev', 'browser-sync'], function() {
 		gulp.watch('src/**/*.*', () => {
-			 runSequence('copy', 'build', 'reload');
+			 runSequence('copy', 'build', 'css', 'reload');
 	 });
 });

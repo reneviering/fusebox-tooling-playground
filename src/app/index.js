@@ -12,7 +12,7 @@ router
 		router.navigateTo('about');
 	})
 	.addRoute('about', {
-		templateUrl: 'about.html',
+		templateUrl: 'about/about.html',
 		routeHandler: () => {
 			console.warn('about route is called....');
 		}
