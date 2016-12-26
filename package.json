@@ -10,9 +10,9 @@
   "author": "René Viering",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1",
     "knockout": "^3.4.1",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
     "vanilla-ui-router": "^1.2.1"
   },
   "devDependencies": {

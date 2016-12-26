@@ -134,11 +134,15 @@ gulp.task('reload', () => {
 });
 
 gulp.task('default', ['dev', 'browser-sync'], function() {
-	gulp.watch('src/**/*.*', () => {
-			runSequence('copy', 'build', 'reload');
+	gulp.watch('src/**/*.js', () => {
+			runSequence('build:client', 'reload');
 	});
 
-	gulp.watch('src/**/*.less', () => {
-			runSequence('css', 'reload');
+	gulp.watch('./package.json', () => {
+			runSequence('build:vendor', 'reload');
+	});
+
+	gulp.watch(['src/**/*.less', 'src/**/*.html'], () => {
+			runSequence('css', 'copy', 'reload');
 	});
 });
