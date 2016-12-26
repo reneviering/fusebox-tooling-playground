@@ -134,7 +134,11 @@ gulp.task('reload', () => {
 });
 
 gulp.task('default', ['dev', 'browser-sync'], function() {
-		gulp.watch('src/**/*.*', () => {
-			 runSequence('copy', 'build', 'css', 'reload');
-	 });
+	gulp.watch('src/**/*.*', () => {
+			runSequence('copy', 'build', 'reload');
+	});
+
+	gulp.watch('src/**/*.less', () => {
+			runSequence('css', 'reload');
+	});
 });
